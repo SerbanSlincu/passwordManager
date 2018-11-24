@@ -1,9 +1,8 @@
 # passwordManager
 
 In order to install this:
-### 1. clone repository
-### 2. apt install xclip
-### 3. mv heisenberg /usr/bin
+### 1. chmod +x setup.sh
+### 2. ./setup.sh
 
 # Now, to run it, do:
 
