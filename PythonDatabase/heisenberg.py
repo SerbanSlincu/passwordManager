@@ -50,35 +50,60 @@ class Database():
             return password
 
 # The interface for the command
-def interface():
-    if len(sys.argv) < 1:
-        return None
+def interface(dbObject):
+    if len(sys.argv) < 2:
+        printHelp()
+        return
 
     command = str(sys.argv[1])
     
     if command == "set":
-        if len(sys.argv) < 3:
-            return None
+        if len(sys.argv) < 4:
+            printHelp()
+            return
         service = str(sys.argv[2])
         password = str(sys.argv[3])
         dbObject.set(service, password)
     elif command == "generate":
-        if len(sys.argv) < 2:
-            return None
+        if len(sys.argv) < 3:
+            printHelp()
+            return
         service = str(sys.argv[2])
         dbObject.generate(service)
     elif command == "get":
-        if len(sys.argv) < 2:
-            return None
+        if len(sys.argv) < 3:
+            printHelp()
+            return
         service = str(sys.argv[2])
-        password = dbObject.get(service)[password]
+        entry = dbObject.get(service)
+        if entry == None:
+            return
+        password = entry["password"]
         pyperclip.copy(password)
     else:
-        print("The way to use it is    heisenberg command argument1 argument2")
+        printHelp()
     
+# For the 'help' command
+def printHelp():
+    print("heisenberg set service password")
+    print("--- to set your password for a serivce")
+    print
+
+    print("heisenberg generate service")
+    print("--- to generate a secure password for a serivce")
+    print
+
+    print("heisenberg get service")
+    print("--- to get the password for a serivce")
+    print
+
+    print("heisenberg help")
+    print("--- to obtain the list of available commands")
+    print
+
 # Where everything happens
 def main():
     dbObject = Database('passwords.db')
-    interface()
+    interface(dbObject)
 
 main()
