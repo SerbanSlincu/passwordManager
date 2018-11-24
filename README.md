@@ -7,11 +7,14 @@ In order to install this:
 
 Now, to run it, do:
 
-# heisenberg set service password
+-- heisenberg set service password
 in order to set your password for a serivce
 
-# heisenberg generate service
+-- heisenberg generate service
 in order to generate a secure password for a serivce
 
-# heisenberg get service
+-- heisenberg get service
 in order to get the password for a serivce
+
+-- heisenberg help
+in order to obtain the list of available commands
