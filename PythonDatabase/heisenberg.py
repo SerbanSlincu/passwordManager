@@ -1,6 +1,8 @@
 #!/usr/bin/python
 
-import dataset 
+import sys
+import pyperclip
+import dataset
 
 # service with a password
 class Database():
@@ -47,15 +49,36 @@ class Database():
         else:
             return password
 
+# The interface for the command
+def interface():
+    if len(sys.argv) < 1:
+        return None
 
-# Testing the class
+    command = str(sys.argv[1])
+    
+    if command == "set":
+        if len(sys.argv) < 3:
+            return None
+        service = str(sys.argv[2])
+        password = str(sys.argv[3])
+        dbObject.set(service, password)
+    elif command == "generate":
+        if len(sys.argv) < 2:
+            return None
+        service = str(sys.argv[2])
+        dbObject.generate(service)
+    elif command == "get":
+        if len(sys.argv) < 2:
+            return None
+        service = str(sys.argv[2])
+        password = dbObject.get(service)[password]
+        pyperclip.copy(password)
+    else:
+        print("The way to use it is    heisenberg command argument1 argument2")
+    
+# Where everything happens
 def main():
     dbObject = Database('passwords.db')
-
-    dbObject.set("reddit", "test")
-    password = dbObject.get("reddit")
-    
-    if password != None:
-        print(password["password"])
+    interface()
 
 main()
