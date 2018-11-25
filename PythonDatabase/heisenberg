@@ -4,6 +4,7 @@ import sys
 import pyperclip
 import dataset
 import random
+import webbrowser
 
 # service with a password
 class Database():
@@ -24,7 +25,6 @@ class Database():
         # 50 is the maximum size for the password
         self.table.create_column('password', self.db.types.string(50))
 
-
     # set a new password for a service
     def set(self, service, password):
         # typecast arguments to strings
@@ -44,6 +44,17 @@ class Database():
         for i in range(0, 20):
             password = password + random.choice(self.alphabet)
         self.set(service, password)
+
+    # set master passsword
+    def setMaster(self, run):
+        if run == 1:
+            webbrowser.open('../PictureCode/index.html')
+        else:
+            with open('temporary') as f:
+                content = f.readlines()
+                content = [x.strip() for x in content]
+                self.set('hEiSeNbErG', content[0])
+
 
     # get the password for a service
     # if it exists
@@ -70,6 +81,12 @@ def interface(dbObject):
         service = str(sys.argv[2])
         password = str(sys.argv[3])
         dbObject.set(service, password)
+    elif command == "setMaster":
+        if len(sys.argv) < 3:
+            printHelp()
+            return
+        run = str(sys.argv[2])
+        dbObject.setMaster(run)
     elif command == "generate":
         if len(sys.argv) < 3:
             printHelp()
@@ -95,6 +112,10 @@ def printHelp():
     print("--- to set your password for a serivce")
     print
 
+    print("heisenberg setMaster run")
+    print("--- to set the master password")
+    print
+
     print("heisenberg generate service")
     print("--- to generate a secure password for a serivce")
     print
@@ -107,9 +128,29 @@ def printHelp():
     print("--- to obtain the list of available commands")
     print
 
+# Check that the master password coincides
+def check(master):
+    webbrowser.open('../PictureCode/index.html')
+    with open('check') as f:
+        content = f.readlines()
+        content = [x.strip() for x in content]
+        return content[0] == master
+
 # Where everything happens
 def main():
     dbObject = Database('passwords.db')
+
+    master = dbObject.get('hEiSeNbErG')
+    if master == None:
+        print("You need to set the master password first!")
+        dbObject.setMaster(1)
+        dbObject.setMaster(2)
+    else:
+        print("Please enter your master password: ")
+        if not (check(master['password'])):
+            print("Wrong password...")
+            return
+
     interface(dbObject)
 
 main()
