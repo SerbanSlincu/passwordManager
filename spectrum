@@ -55,7 +55,7 @@ class Database():
     # set master passsword
     def setMaster(self, run):
         if run == 1:
-            webbrowser.open('../generator/indexCreate.html')
+            webbrowser.open('./generator/indexCreate.html')
         else:
             with open('temporary', 'rb') as f:
                 content = f.readlines()
@@ -144,7 +144,7 @@ def printHelp():
 def check():
     if not os.path.exists('./check'):
         print("Download the file and delete it afterwards!")
-        webbrowser.open('../generator/indexCheck.html')
+        webbrowser.open('./generator/indexCheck.html')
         return
 
     with open('check') as f:
