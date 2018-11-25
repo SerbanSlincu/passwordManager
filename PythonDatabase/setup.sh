@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Clone the repository
-git clone https://github.com/SerbanSlincu/passwordManager.git
-
 # Install the modules for python
 pip install dataset
 pip install pyperclip

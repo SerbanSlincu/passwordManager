@@ -5,12 +5,21 @@ import pyperclip
 import dataset
 import random
 import webbrowser
-import os.path
+import os
+from hashlib import sha256
 
 # service with a password
 class Database():
 
     alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()'
+
+    # Encrypt the values before putting them in the database
+    def encrypt(self, service, password):
+        if True:
+            print("yes")
+        else:
+            print("yes")
+            
 
     # (creating and) Connecting to the database
     def __init__(self, databaseName):
@@ -35,9 +44,9 @@ class Database():
         # check that an entry with the same key does not exist
         exist = self.table.find_one(service=service)
         if exist != None:
-            self.table.update(dict(service=service, password=password), ['service'])
+            self.table.update(dict(service=service, password=self.encrypt(service, password)), ['service'])
         else:
-            self.table.insert(dict(service=service, password=password))
+            self.table.insert(dict(service=service, password=self.encrypt(serivce, password)))
 
     # generate a new password for a service
     def generate(self, service):
@@ -51,11 +60,14 @@ class Database():
         if run == 1:
             webbrowser.open('../PictureCode/indexCreate.html')
         else:
-            with open('temporary') as f:
+            with open('temporary', 'rb') as f:
                 content = f.readlines()
                 content = [x.strip() for x in content]
-                self.set('hEiSeNbErG', content[0])
+                os.remove('temporary')
 
+                f = open("master","w+")
+                f.write(sha256(content[0]).hexdigest())
+                f.close()
 
     # get the password for a service
     # if it exists
@@ -130,7 +142,7 @@ def printHelp():
     print
 
 # Check that the master password coincides
-def check(master):
+def check():
     if not os.path.exists('./check'):
         print("Download the file and delete it afterwards!")
         webbrowser.open('../PictureCode/indexCheck.html')
@@ -139,8 +151,13 @@ def check(master):
     with open('check') as f:
         content = f.readlines()
         content = [x.strip() for x in content]
-        if content[0] == master:
-           return True 
+        possible = sha256(content[0]).hexdigest()
+        f.close()
+    
+    master = open('master', "r")
+    for contentMaster in master:
+        if possible == contentMaster:
+            return True 
         else:
             print("Wrong password...")
             return False
@@ -149,8 +166,7 @@ def check(master):
 def main():
     dbObject = Database('passwords.db')
 
-    master = dbObject.get('hEiSeNbErG')
-    if master == None:
+    if not (os.path.exists('./master')):
         if os.path.exists('./temporary'):
             print("Your master password has been set!")
             dbObject.setMaster(2)
@@ -159,7 +175,7 @@ def main():
             print("Download the file and delete it afterwards!")
             dbObject.setMaster(1)
     else:
-        if not (check(master['password'])):
+        if not (check()):
             return
 
     interface(dbObject)
