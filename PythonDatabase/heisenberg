@@ -3,9 +3,12 @@
 import sys
 import pyperclip
 import dataset
+import random
 
 # service with a password
 class Database():
+
+    alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()'
 
     # (creating and) Connecting to the database
     def __init__(self, databaseName):
@@ -37,7 +40,10 @@ class Database():
 
     # generate a new password for a service
     def generate(self, service):
-        set(service, "Not yet defined")
+        password = "";
+        for i in range(0, 20):
+            password = password + random.choice(self.alphabet)
+        self.set(service, password)
 
     # get the password for a service
     # if it exists

@@ -1,18 +1,17 @@
 var scene, camera, renderer, controls;
 
-var width = 640*2;
-var height = 320*2;
+var width = 64*20*window.devicePixelRatio;
+var height = 32*20*window.devicePixelRatio;
 
 // function to initialise the scene, camera and renderer
 
-function initialise(){
 
 	//initialise the scene
 	scene = new THREE.Scene();
 
 	//initialise and add the camera to the scene
 	camera = new THREE.PerspectiveCamera(75, width/height, 1, 5000 );
-	camera.position.z = 418;
+	camera.position.z = 104;
 	scene.add( camera );
 
 	//initialise the renderer
@@ -20,7 +19,6 @@ function initialise(){
 	renderer.setSize(width, height);
 	document.body.appendChild( renderer.domElement );
 
-}
 
 //function to generate a random color from a set
 
@@ -31,28 +29,24 @@ function getRandomColorFromSet() {
 	return color;
 }
 
-//function to generate a random color without white
+//function to generate a random color
 
 function getRandomColor() {
 
-	var color = "#ffffff";
-
-	while(color == "#ffffff") {
-		var letters = '0123456789ABCDEF';
-		color = '#';
-		for (var i = 0; i < 6; i++) {
-	   		color += letters[Math.floor(Math.random() * 16)];
-		}
+	var letters = '0123456789ABCDEF';
+	var color = '#';
+	for (var i = 0; i < 6; i++) {
+   		color += letters[Math.floor(Math.random() * 16)];
 	}
 	return color;
 }
 
 
 //the value by which we increase x and y 
-var valx = width / 64;
-var valy = height / 32;
+var valx = 10*window.devicePixelRatio/2;
+var valy = 10*window.devicePixelRatio/2;
 
-//function to add the first square
+//function to add the first triangle
 
 function defineRectangle(x, y){
 
@@ -80,11 +74,6 @@ function defineRectangle(x, y){
 	return geometry;
 }
 
-var colors = [];
-
-function getColorPoint(point) {
-	return colors[point.x + point.y];
-}
 
 // function to draw the triangles on a canvas
 
@@ -93,26 +82,24 @@ function rectangles() {
 	var rect = [];
 
 	//the values determining the position of the rectangle; z will be 0
-	var x = -width / 2;
-	var y = -height / 2;
+	var x = -320*window.devicePixelRatio;
+	var y = -160*window.devicePixelRatio;
 	
-	while(y < height / 2){
+	while(y < 160*window.devicePixelRatio){
+
+		if(x > 160*window.devicePixelRatio){
+			x = -160*window.devicePixelRatio;
+			y = y + valy;
+		}
 		
 		//add two triangles at a time to the scene
 		var square = (defineRectangle(x,y));
 
-		var getColor = getRandomColor();
-		var material1 = new THREE.MeshBasicMaterial({color : getColor});
-
-		colors = colors.concat([getColor]);
+		var material1 = new THREE.MeshBasicMaterial({color : getRandomColor()});
 
 		var mesh1 = new THREE.Mesh( square, material1 );
 
 		x = x + valx;
-		if(x >= width / 2){
-			x = -width / 2;
-			y = y + valy;
-		}
 
 		var edges = new THREE.EdgesHelper(mesh1, 0x000000);
 		edges.material.linewidth = 1.5;
@@ -131,125 +118,47 @@ function circles(){
 	var circ = [];
 
 	//the values determining the position of the circle
-	var circlex = -width / 2 + width / 8;
-	var circley = -height / 2 + height / 4;
-	var valCy = width / 4;
-	var valCx = height / 2;
+	var circlex = -120*window.devicePixelRatio;
+	var circley = -200*window.devicePixelRatio;
+	var valCy = 4*20*window.devicePixelRatio;
+	var valCx = 4*20*window.devicePixelRatio;
 
-	while(circley < height / 2){
+	while(circley < 200*window.devicePixelRatio){
 
-		//add the big circle to the scene
-		var bigCircle = new THREE.RingGeometry(width / 8 - 4, width / 8, 1024);
-		var materialBig = new THREE.MeshBasicMaterial({color : 0x000000});
+	if(circlex > 120*window.devicePixelRatio){
 
-		var bigCircleMesh = new THREE.Mesh( bigCircle, materialBig );
-		bigCircleMesh.applyMatrix( new THREE.Matrix4().makeTranslation(circlex, circley, 0) );
+		circlex = -120*window.devicePixelRatio;
+		circley = circley + valCy;
+	}
 
-		//add the small circle to the scene
-		var smallCircle = new THREE.RingGeometry(width / 16 - 4, width / 16, 1024);
-		var materialSmall = new THREE.MeshBasicMaterial({color : 0x000000});
+	//add the big circle to the scene
+	var bigCircle = new THREE.RingGeometry(2*20*window.devicePixelRatio - 1, 2*20*window.devicePixelRatio, 256);
+	var materialBig = new THREE.MeshBasicMaterial({color : 0x000000});
 
-		var smallCircleMesh = new THREE.Mesh( smallCircle, materialSmall );
-		smallCircleMesh.applyMatrix( new THREE.Matrix4().makeTranslation(circlex, circley, 0) );
-		
-		circlex = circlex + valCx;
-		if(circlex > width / 2){
+	var bigCircleMesh = new THREE.Mesh( bigCircle, materialBig );
+	bigCircleMesh.applyMatrix( new THREE.Matrix4().makeTranslation(circlex, circley, 0) );
 
-			circlex = -width / 2 + width / 8;
-			circley = circley + valCy;
-		}
+	//add the small circle to the scene
+	var smallCircle = new THREE.RingGeometry(20*window.devicePixelRatio - 1, 20*window.devicePixelRatio, 256);
+	var materialSmall = new THREE.MeshBasicMaterial({color : 0x000000});
 
-		circ = circ.concat([bigCircleMesh, smallCircleMesh]);
+	var smallCircleMesh = new THREE.Mesh( smallCircle, materialSmall );
+	smallCircleMesh.applyMatrix( new THREE.Matrix4().makeTranslation(circlex, circley, 0) );
+	circlex = circlex + valCx;
+
+	circ = circ.concat([bigCircleMesh, smallCircleMesh]);
+
 	}
 
 	return circ;
 }
 
-initialise();
+//function to get the square when somebody clicks on it
 
 var objects = rectangles().concat(circles());
 for(var object = 0; object < objects.length; object ++){
 	scene.add(objects[object]);
 }
-
-
-//function to randomly choose 5 points in the grid
-
-function choosePoints(){
-
-	var points = [];
-
-	for(i = 0; i < 5; i ++){
-
-		var point = new THREE.Vector2();
-		randomX = Math.random() * 64;
-		randomY = Math.random() * 32;
-		point.x = Math.floor(randomX * 20 - 640);
-		point.x = point.x - point.x % (width / 64);
-		point.y = Math.floor(randomY * 20 - 320);
-		point.y = point.y - point.y % (height / 32);
-
-		console.log(point.x + "  " + point.y);
-		console.log();
-
-		points = points.concat([point]);
-	}
-
-	return points;
-
-}
-
-//function to highlight the points chosen
-
-function highlight(points){
-
-	for(i = 0; i < 5; i ++){
-
-		var square = defineRectangle(points[i].x, points[i].y);
-		var material = new THREE.MeshBasicMaterial({color : getColorPoint(points[i])});
-
-		var mesh = new THREE.Mesh( square, material );
-
-		var edges = new THREE.EdgesHelper(mesh, 0xffffff);
-		edges.material.linewidth = 4;
-
-		scene.add( mesh, edges );
-	}
-}
-
-var clickedPoints = [];
-var chosenPoints = [];
-counter = 0;
-	
-function testing() {
-	if(clickedPoints.length == 5) {
-		if(rightPoints()) counter += 1;
-		clickedPoints = [];
-	}
-}
-
-function cmp(a, b) {
-	if(a.x == b.x)
-		return a.y < b.y;
-	return a.x < b.x;
-}
-
-function rightPoints() {
-
-	clickedPoints.sort(cmp);
-	chosenPoints.sort(cmp);
-
-	i = 0;
-	while(i < 5) {
-		if(chosenPoints[i].x != clickedPoints[i].x && chosenPoints[i].y != clickedPoints[i].y) {
-			return false;
-		}
-		i += 1;
-	}
-
-	return true;
-}
-
 
 var my_canvas= renderer.domElement;
 var gctx=my_canvas.getContext("2d");
@@ -257,51 +166,24 @@ var gctx=my_canvas.getContext("2d");
 //add a listener to record the mouse clicks
 my_canvas.addEventListener("mousedown", mousedown_event, false);
 
-//function to get coordinates of mouse clicks
 
-first = true;
+//function to get coordinates of mouse clicks
 
 function mousedown_event(e) {
 
-	if(first) {
-		chosenPoints = choosePoints();
-		highlight(chosenPoints);
-
-		first = false;
-		return;
-	}
-
 	var rect = my_canvas.getBoundingClientRect();
-	var point = new THREE.Vector2();
-
-    point.x = e.clientX - rect.left;
-    point.y = e.clientY - rect.top;
-
-	point.x = point.x - 640;
-    point.y = 320 - point.y;
-	
-	point.x = point.x - point.x % (width / 64);
-	if(point.x <= 0) point.x -= 20;
-
-	point.y = point.y - point.y % (height / 32);
-	if(point.y <= 0) point.y -= 20;
-
-    console.log("mousedown X= " + point.x + ", Y=" + point.y);
-    clickedPoints = clickedPoints.concat([point]);
+	     x1 = e.clientX - rect.left;
+	     y1 = e.clientY - rect.top;
+	     console.log("mousedown X= " +x1+", Y="+y1);
 }
+
 //function to render the scene
 
 function animate() {
 
     requestAnimationFrame( animate );
     renderer.render( scene, camera );
-	
-	if(!first && counter < 5) {
-		testing();
-	}
-	else if(counter == 5) {
-
-	}
+    
 }
 
 animate();
