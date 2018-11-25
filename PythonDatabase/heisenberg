@@ -5,6 +5,7 @@ import pyperclip
 import dataset
 import random
 import webbrowser
+import os.path
 
 # service with a password
 class Database():
@@ -130,7 +131,11 @@ def printHelp():
 
 # Check that the master password coincides
 def check(master):
-    webbrowser.open('../PictureCode/index.html')
+    if not os.path.exists('./check'):
+        print("Download the file and delete it afterwards!")
+        webbrowser.open('../PictureCode/index.html')
+        return
+
     with open('check') as f:
         content = f.readlines()
         content = [x.strip() for x in content]
@@ -143,10 +148,12 @@ def main():
     master = dbObject.get('hEiSeNbErG')
     if master == None:
         print("You need to set the master password first!")
-        dbObject.setMaster(1)
-        dbObject.setMaster(2)
+        if os.path.exists('./temporary'):
+            dbObject.setMaster(2)
+        else:
+            print("Download the file and delete it afterwards!")
+            dbObject.setMaster(1)
     else:
-        print("Please enter your master password: ")
         if not (check(master['password'])):
             print("Wrong password...")
             return
