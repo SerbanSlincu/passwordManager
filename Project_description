@@ -1,0 +1,26 @@
+Inspiration: 
+The existing password managers require a master password that is strong and therefore is hard to remember. Moreover, people have a harder time remembering alpha-numerical passwords rather than remembering something visually, which is why our idea was to create a new way of generating a master password that is as secure as an 8-characters apha-numeric one, but which is much easier to remember.
+
+What it does: 
+We created a password manager that has a completely random master password generator which is done by choosing 5 random squares in a grid of 64x32. After generating the 5 squares, there is a learning part, where the user is made to click on the same tuple of squares 5 times to make sure they remember it for future use. The grid has some circles as visual aiders for the user to remember their position more easily. This ensures the same level of security as an 8-characters password, where the characters were chosen completely randomly. The fact that the master password is randomly generated increases security, since a dictionary attack cannot be performed.
+ 
+How we built it: 
+We used JavaScript to generate and test the master password and python to create an offline database to first set the master password and then store the wanted passwords. We also used a module to copy the content of the passwords to the clipboard so that it is not visible until is is pasted, which offers an easier way to use the password manager.
+
+Challenges we ran into: 
+The main challenge was finding a way to create the grid such that it is also secure and easy to remember. Since it has to be 64x32, we tried to find the best way to help the user remember the 5 squares that were picked and there is still room for improvement and new ideas. Moreover, making the database secure is still a challenge, as we tried using an asymmetric hashing function (having a public and a private key), but we did not manage to do it until the submission time (we will still work on it).
+
+Accomplishments that we are proud of: 
+- creating a database that allows us to store passwords and linking it to the master password generator;
+- combining two scripting languages that complete one another;
+- learning more about the key generators for ciphers and the ingenuities that come with that;
+- creating an actual product that we could use ourselves.
+
+What we learned:
+- how to use programming languages that we have very little experience in;
+- how to create an installation script;
+- how passwords managers handle the master password picking;
+- how to create a database from scratch.
+
+What's next for test: 
+We came up with another idea which involves the user providing a photo and then the square picking is done on that particular picture. The idea would be that no hacker has access to that picture and therefore, it is perfectly secure. Another idea, maybe more user-friendly, is to have a large database with pictures and every time a master password is needed, the system maps a random picture to the user on which the square-picking is done. Moreover, we want to add all the functionalities of a password manager so that it has real-life applications, such as: enabling importing from browsers (extensions), two-factor authentication, fill web forms etc.
