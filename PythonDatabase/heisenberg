@@ -14,11 +14,12 @@ class Database():
     alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()'
 
     # Encrypt the values before putting them in the database
-    def encrypt(self, service, password):
+    def encrypt(self, password):
         if True:
             print("yes")
         else:
             print("yes")
+        return password
             
 
     # (creating and) Connecting to the database
@@ -44,9 +45,9 @@ class Database():
         # check that an entry with the same key does not exist
         exist = self.table.find_one(service=service)
         if exist != None:
-            self.table.update(dict(service=service, password=self.encrypt(service, password)), ['service'])
+            self.table.update(dict(service=service, password=self.encrypt(password)), ['service'])
         else:
-            self.table.insert(dict(service=service, password=self.encrypt(serivce, password)))
+            self.table.insert(dict(service=service, password=self.encrypt(password)))
 
     # generate a new password for a service
     def generate(self, service):
