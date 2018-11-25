@@ -49,7 +49,7 @@ class Database():
     # set master passsword
     def setMaster(self, run):
         if run == 1:
-            webbrowser.open('../PictureCode/index.html')
+            webbrowser.open('../PictureCode/indexCreate.html')
         else:
             with open('temporary') as f:
                 content = f.readlines()
@@ -133,13 +133,17 @@ def printHelp():
 def check(master):
     if not os.path.exists('./check'):
         print("Download the file and delete it afterwards!")
-        webbrowser.open('../PictureCode/index.html')
+        webbrowser.open('../PictureCode/indexCheck.html')
         return
 
     with open('check') as f:
         content = f.readlines()
         content = [x.strip() for x in content]
-        return content[0] == master
+        if content[0] == master:
+           return True 
+        else:
+            print("Wrong password...")
+            return False
 
 # Where everything happens
 def main():
@@ -147,15 +151,15 @@ def main():
 
     master = dbObject.get('hEiSeNbErG')
     if master == None:
-        print("You need to set the master password first!")
         if os.path.exists('./temporary'):
+            print("Your master password has been set!")
             dbObject.setMaster(2)
         else:
+            print("You need to set the master password first!")
             print("Download the file and delete it afterwards!")
             dbObject.setMaster(1)
     else:
         if not (check(master['password'])):
-            print("Wrong password...")
             return
 
     interface(dbObject)
