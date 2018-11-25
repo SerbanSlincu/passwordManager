@@ -15,10 +15,6 @@ class Database():
 
     # Encrypt the values before putting them in the database
     def encrypt(self, password):
-        if True:
-            print("yes")
-        else:
-            print("yes")
         return password
             
 
@@ -59,14 +55,16 @@ class Database():
     # set master passsword
     def setMaster(self, run):
         if run == 1:
-            webbrowser.open('../PictureCode/indexCreate.html')
+            webbrowser.open('../generator/indexCreate.html')
         else:
             with open('temporary', 'rb') as f:
                 content = f.readlines()
                 content = [x.strip() for x in content]
+
                 os.remove('temporary')
 
                 f = open("master","w+")
+                content[0].rstrip("\n\r")
                 f.write(sha256(content[0]).hexdigest())
                 f.close()
 
@@ -146,7 +144,7 @@ def printHelp():
 def check():
     if not os.path.exists('./check'):
         print("Download the file and delete it afterwards!")
-        webbrowser.open('../PictureCode/indexCheck.html')
+        webbrowser.open('../generator/indexCheck.html')
         return
 
     with open('check') as f:
@@ -155,7 +153,7 @@ def check():
         possible = sha256(content[0]).hexdigest()
         f.close()
     
-    master = open('master', "r")
+    master = open('./master', "r")
     for contentMaster in master:
         if possible == contentMaster:
             return True 

@@ -8,4 +8,4 @@ pip install pyperclip
 sudo apt install xclip
 
 # Make it a command
-sudo mv heisenberg /usr/bin
+sudo mv spectrum /usr/bin
